@@ -1,0 +1,147 @@
+/* General look */
+body {
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background: #0b0d10;
+  color: #e8eef5;
+  margin: 0;
+  text-align: center;
+}
+
+/* Header with logo */
+.site-header {
+  padding: 1rem;
+  background: #11151b;
+  border-bottom: 1px solid #222;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.site-header .logo {
+  height: 50px;
+  width: 50px;
+  margin-bottom: .5rem;
+}
+.site-header h1 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+.site-header .subtitle {
+  color: #9fb0c3;
+  margin-top: .3rem;
+  font-size: .9rem;
+}
+
+.viewer-panel {
+  max-width: 900px;
+  margin: 1.5rem auto;
+  padding: 1.2rem;
+  background: #11151b;
+  border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+}
+
+/* Video wrapper for better sizing */
+.video-wrapper {
+  width: 100%;
+  position: relative;
+}
+video {
+  width: 100%;
+  height: 65vh; /* 📱 taller for mobile (65% of viewport height) */
+  max-height: 80vh; 
+  border-radius: 12px;
+  background: #000;
+  object-fit: cover; /* make it fill nicely */
+}
+
+/* Status */
+.status {
+  margin: 1rem 0;
+}
+.badge {
+  padding: .4rem .8rem;
+  border-radius: 999px;
+  font-size: .9rem;
+  background: #222;
+}
+.badge.on { background: #22c55e33; color: #22c55e; }
+.badge.off { background: #ef444433; color: #ef4444; }
+
+/* Search section */
+.search-box {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: .6rem;
+  flex-wrap: wrap; /* 📱 mobile: wrap nicely */
+}
+
+.search-icon {
+  height: 28px;
+  width: 28px;
+}
+
+#searchForm {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+
+#searchInput {
+  padding: .6rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background: #0e141b;
+  color: #e8eef5;
+  min-width: 220px;
+  flex: 1;
+}
+
+#searchForm button {
+  padding: .6rem 1rem;
+  border-radius: 8px;
+  border: none;
+  background: #4f8cff;
+  color: #fff;
+  cursor: pointer;
+}
+#searchForm button:hover {
+  background: #2563eb;
+}
+
+/* 📱 Mobile tweaks */
+@media (max-width: 600px) {
+  .site-header h1 {
+    font-size: 1.2rem;
+  }
+  video {
+    height: 70vh; /* more height on small screens */
+  }
+  #searchInput {
+    min-width: 160px;
+  }
+}
+
+/* Social / extra icons */
+.icon-bar {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.icon-bar img {
+  height: 36px;
+  width: 36px;
+  border-radius: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.icon-bar img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}

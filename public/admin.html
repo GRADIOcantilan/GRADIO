@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <header>
+    <h1>🎥 Admin Live Streaming</h1>
+    <p class="subtitle">Streaming to permanent key: <code>plexstream001</code></p>
+  </header>
+
+  <main class="viewer-panel">
+    <button id="startBtn">Start Stream</button>
+    <video id="preview" autoplay playsinline muted></video>
+  </main>
+
+  <script>
+    const socket = io();
+    const preview = document.getElementById('preview');
+    const startBtn = document.getElementById('startBtn');
+    let localStream;
+    let peers = {};
+    const streamId = "plexstream001"; // 🔑 permanent stream key
+
+    startBtn.onclick = async () => {
+      localStream = await navigator

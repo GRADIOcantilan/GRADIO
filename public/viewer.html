@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Viewer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 📱 Mobile friendly -->
+  <link rel="stylesheet" href="style.css">
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <!-- 🔥 Header with custom local logo -->
+  <header class="site-header">
+    <img src="logo.png" alt="Logo" class="logo">
+    <h1>Watch Live Stream</h1>
+    <p class="subtitle">Connected to permanent stream: <code>plexstream001</code></p>
+  </header>
+
+  <main class="viewer-panel">
+    <!-- 🎥 Live video -->
+    <div class="video-wrapper">
+      <video id="player" autoplay playsinline controls></video>
+    </div>
+
+    <!-- 🔴 Status -->
+    <div class="status">
+      <span class="badge off" id="statusBadge">🔴 Offline</span>
+    </div>
+
+    <!-- 🔎 Search bar with logo icon -->
+    <div class="search-box">
+      <img src="logo.png" alt="Search Icon" class="search-icon">
+      <form id="searchForm" target="_blank">
+        <input id="searchInput" type="text" placeholder="Search...">
+        <button type="submit">Go</button>
+      </form>
+    </div>
+
+    <!-- 🌐 Social/extra icons -->
+    <div class="icon-bar">
+      <a href="https://facebook.com" target="_blank">
+        <img src="facebook.png" alt="Facebook">
+      </a>
+      <a href="https://youtube.com" target="_blank">
+        <img src="youtube.png" alt="YouTube">
+      </a>
+      <a href="#"><img src="icon1.png" alt="Icon 1"></a>
+      <a href="#"><img src="icon2.png" alt="Icon 2"></a>
+      <a href="#"><img src="icon3.png" alt="Icon 3"></a>
+      <a href="#"><img src="icon4.png" alt="Icon 4"></a>
+    </div>
+  </main>
+
+  <script>
+    const socket = io();
+    const player = document.getElementById('player');
+    const statusBadge = document.getElementById('statusBadge');
+    const streamId = "plexstream001"; // permanent stream key
+    let pc;
+
+    function setStatus(online) {
+      statusBadge.textContent = online ? "🟢 Online" : "🔴 Offline";
+      statusBadge.className = "badge " + (online ? "on" : "off");
+    }
+
+    socket.emit('join', { streamId, role: 'viewer' });
+
+    socket.on('offer', async ({ sdp, broadcasterId }) => {
+      pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+      pc.onicecandidate = e => { if (e.candidate) socket.emit('candidate', { targetId: broadcasterId, candidate: e.candidate }); };
+      pc.ontrack = e => { player.srcObject = e.streams[0]; };
+      await pc.setRemoteDescription(new RTCSessionDescription(sdp));
+      const answer = await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+      socket.emit('answer', { broadcasterId, sdp: answer });
+      setStatus(true);
+    });
+
+    socket.on('candidate', async ({ candidate }) => {
+      if (pc) await pc.addIceCandidate(new RTCIceCandidate(candidate));
+    });
+
+    socket.on('end', () => {
+      setStatus(false);
+      player.srcObject = null;
+      pc?.close();
+    });
+
+    socket.on('status', ({ online }) => {
+      setStatus(!!online);
+    });
+
+    // 🔎 Handle search form
+    const searchForm = document.getElementById('searchForm');
+    searchForm.onsubmit = (e) => {
+      e.preventDefault();
+      const q = document.getElementById('searchInput').value.trim();
+      if (q) {
+        window.open("https://www.google.com/search?q=" + encodeURIComponent(q), "_blank");
+      }
+    };
+  </script>
+</body>
+</html>
