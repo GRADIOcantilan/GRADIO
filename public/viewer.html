@@ -17,9 +17,18 @@
 
   <main class="viewer-panel">
     <!-- 🎥 Live video -->
-    <div class="video-wrapper">
-      <video id="player" autoplay playsinline controls></video>
-    </div>
+    <!-- 🎥 Facebook Live embed -->
+<div class="video-wrapper">
+  <iframe
+    src="https://www.facebook.com/plugins/video.php?href=YOUR_FACEBOOK_LIVE_URL&show_text=false&autoplay=true"
+    width="100%"
+    height="500"
+    style="border:none;overflow:hidden;border-radius:12px;"
+    frameborder="0"
+    allowfullscreen="true"
+    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+  </iframe>
+</div>
 
     <!-- 🔴 Status -->
     <div class="status">
@@ -101,3 +110,4 @@
   </script>
 </body>
 </html>
+
